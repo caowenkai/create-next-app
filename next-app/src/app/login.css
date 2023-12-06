@@ -1,0 +1,10 @@
+.login-form {
+    padding-top: 20px;
+}
+.login-form .submit-box button{
+    color: #333;
+    border: 1px solid #999;
+}
+.login-form .submit-box button:hover{
+    color: #fff !important;
+}
