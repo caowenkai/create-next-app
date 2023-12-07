@@ -1,53 +1,26 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Breadcrumb, theme, Modal, Form } from 'antd';
+import React, { useState } from 'react';
+import { Layout, Menu, Breadcrumb, theme, Modal, Flex } from 'antd';
 import type { MenuProps } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import Login from './login'
+import './page.css'
+import menuData from '../mock_data/menu.json'
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
+const { menu = [] } = menuData 
 
-const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
+//  Most of the time the data here needs to be recursive 
+const itemsData: MenuProps['items'] = menu
 
-const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-  (icon, index) => {
-    const key = String(index + 1);
-
-    return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: `subnav ${key}`,
-      children: new Array(4).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1;
-        return {
-          key: subKey,
-          label: `option${subKey}`,
-        };
-      }),
-    };
-  },
-);
+const handleLogout = () => {
+  window.localStorage.setItem('login-status', 'false')
+  window.location.reload()
+}
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLogged, setIsLogged] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const loginStatus = window.localStorage.getItem('login-status')
-      setIsLogged(loginStatus === 'true')
-    }
-  }, []);
-
   const showModal = () => {
     setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
@@ -59,7 +32,8 @@ export default function Home() {
   } = theme.useToken();
 
   const onClickMenu: MenuProps['onClick'] = (e) => {
-    console.log(e, '123123')
+    const loginStatus = window.localStorage.getItem('login-status')
+    const isLogged = loginStatus === 'true'
     if (isLogged) {
       console.log('到某个页面去111')
     } else {
@@ -77,15 +51,18 @@ export default function Home() {
             defaultSelectedKeys={['1']}
             defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
-            items={items2}
+            items={itemsData}
           />
         </Sider>
         <Layout style={{ padding: '0 24px 24px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
+          <Flex justify="space-between">
+            <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              <Breadcrumb.Item>List</Breadcrumb.Item>
+              <Breadcrumb.Item>App</Breadcrumb.Item>
+            </Breadcrumb>
+            <span onClick={handleLogout} className="logout-button" style={{margin: '16px 0px'}}>logout</span>
+          </Flex>
           <Content
             style={{
               padding: 24,

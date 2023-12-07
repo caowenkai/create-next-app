@@ -1,15 +1,39 @@
 import React from 'react';
-import { Button, Form, Input, Space } from 'antd';
+import { Button, Form, Input, Space, message } from 'antd';
 import './login.css'
+import  userData from '../mock_data/userdata.json'
 
-const onFinish = (values: any) => {
-    console.log('Success:', values);
-    // const loginStatus = window.localStorage.getItem('login-status')
-    window.localStorage.setItem('login-status', 'true')
-};
+const checkUserInfo = (info) => {
+  return new Promise((resolve, reject) => {  
+    setTimeout(() => {  
+        const { userList } = userData
+        const found = userList.find(obj => obj.username === info.username && obj.password === info.password)
+        if (found) {
+          resolve({  
+              status: 200,  
+              data: {  
+                  message: 'login successfully',  
+                  time: new Date().toLocaleTimeString()  
+              }  
+          });  
+        } else {
+          reject({
+              status: 500,  
+              data: {  
+                  message: 'User name or password error not found',  
+                  time: new Date().toLocaleTimeString()  
+              }  
+          })
+        }
+        
+    }, 100); // Delay 200 milliseconds to simulate a real network request
+  });  
+}
+
+
 
 const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    window.localStorage.setItem('login-status', 'false')
 };
 
 type FieldType = {
@@ -24,6 +48,16 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = (props) => {
     const { closeModel } = props
 
+    const onFinish = (values: any) => {
+        checkUserInfo(values).then(res => {
+          window.localStorage.setItem('login-status', 'true')
+          message.success(res?.data?.message);
+          closeModel()
+        }).catch(err => {
+          message.warning(err?.data?.message);
+          console.error(err)
+        })
+    };
     return (
         <Form
         name="basic"

@@ -1,0 +1,43 @@
+{
+    "menu": [
+        {
+            "key": 1,
+            "label": "Menu 1",
+            "children": [
+                {
+                    "key": 2,
+                    "label": "Submenu 1-1",
+                    "children": [
+                        {
+                            "key": 3,
+                            "label": "Submenu 1-1.1"
+                        },
+                        {
+                            "key": 4,
+                            "label": "Submenu 1-1.2"
+                        }
+                    ]
+                },
+                {
+                    "key": 5,
+                    "label": "Submenu 1-2"
+                }
+            ]
+        },
+        {
+            "key": 6,
+            "label": "Menu 2",
+            "children": [
+                {
+                    "key": 7,
+                    "label": "Submenu 2-1"
+                },
+                {
+                    "key": 8,
+                    "label": "Submenu 2-2",
+                    "children": []
+                }
+            ]
+        }
+    ]
+}
